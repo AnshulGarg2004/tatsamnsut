@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hindi Vocabulary Quiz</title>
+  <style>
+    :root {
+      --light-bg: #f9f9f9;
+      --light-text: #1a1a1a;
+      --light-card: #ffffff;
+      --light-accent: #e65100;
+
+      --dark-bg: #121212;
+      --dark-text: #eee;
+      --dark-card: #1e1e1e;
+      --dark-accent: #ffb700;
+
+      --correct-bg: #d4edda;
+      --incorrect-bg: #f8d7da;
+      --correct-text: #155724;
+      --incorrect-text: #721c24;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: var(--light-bg);
+      color: var(--light-text);
+      padding: 2rem;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .dark-mode {
+      background: var(--dark-bg);
+      color: var(--dark-text);
+    }
+
+    header {
+      background-color: #111;
+      padding: 20px 40px;
+      position: relative;
+      text-align: center;
+    }
+
+    header nav ul {
+      list-style-type: none;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 25px;
+      margin: 0;
+      padding: 0;
+    }
+
+    header nav ul li a {
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+      font-size: 1.1rem;
+      transition: color 0.3s ease;
+    }
+
+    header nav ul li a:hover {
+      color: #ffed00;
+    }
+
+    .theme-toggle {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      z-index: 1000;
+      color: white;
+      transition: transform 0.3s;
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--light-accent);
+      margin: 2rem 0;
+      font-size: 2.5rem;
+    }
+
+    .dark-mode h1 {
+      color: var(--dark-accent);
+    }
+
+    .quiz {
+      background: var(--light-card);
+      padding: 1.5rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      margin-bottom: 1.5rem;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .dark-mode .quiz {
+      background: var(--dark-card);
+    }
+
+    .quiz h3 {
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+      color: var(--light-accent);
+    }
+
+    .dark-mode .quiz h3 {
+      color: var(--dark-accent);
+    }
+
+    .options label {
+      display: block;
+      margin-bottom: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .options label:hover {
+      background-color: #f1f1f1;
+    }
+
+    .dark-mode .options label:hover {
+      background-color: #2a2a2a;
+    }
+
+    .options input[type="radio"]:checked + span {
+      font-weight: bold;
+      text-decoration: underline;
+    }
+
+    .correct {
+      background-color: var(--correct-bg) !important;
+      color: var(--correct-text);
+    }
+    .shlok {
+        text-align: center;
+        align-items: center;
+        font-size: large;
+    }
+    .incorrect {
+      background-color: var(--incorrect-bg) !important;
+      color: var(--incorrect-text);
+    }
+
+    .feedback {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    #submit-btn {
+      display: block;
+      margin: 2rem auto;
+      padding: 14px 28px;
+      font-size: 1rem;
+      background-color: #0288d1;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    #submit-btn:hover {
+      background-color: #0277bd;
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      header nav ul {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .theme-toggle {
+        right: 15px;
+        top: 15px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 1rem;
+      }
+
+      .quiz {
+        padding: 1rem;
+      }
+
+      #submit-btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle Theme">🌙</button>
+    <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/quiz">Quizzes</a></li>
+        <li><a href="/progress">Progress</a></li>
+        <li><a href="/leaderboard">Leaderboard</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <h1>Hindi Vocabulary Quiz</h1>
+
+  <form id="quiz-form">
+    <div class="shlok">Shlok 1</div>
+    <div class="quiz">
+      <h3>1. How did Sita perceive Rama during the swamvar?</h3>
+      <div class="options">
+        <label><input type="radio" name="q1" value="A"><span> वह एक क्रूर योद्धा थे</span></label>
+        <label><input type="radio" name="q1" value="B"><span> वह एक सुंदर, सौम्य योद्धा थे जिनमें दिव्य आभा थी</span></label>
+        <label><input type="radio" name="q1" value="C"><span> वह एक क्रोधित राजा थे</span></label>
+        <label><input type="radio" name="q1" value="D"><span> वह एक कायर राजकुमार थे</span></label>
+      </div>
+      <div class="feedback" id="feedback-q1"></div>
+    </div>
+    <div class="quiz">
+        <h3>2. What captivated Sita’s heart in Rama?</h3>
+        <div class="options">
+          <label><input type="radio" name="q2" value="A"><span> उनकी ताकत और शक्ति</span></label>
+          <label><input type="radio" name="q2" value="B"><span> उनकी दिव्य आभा और वीरता</span></label>
+          <label><input type="radio" name="q2" value="C"><span> उनकी संपत्ति और राज्य</span></label>
+          <label><input type="radio" name="q2" value="D"><span> उनकी बुद्धिमानी और ज्ञान</span></label>
+        </div>
+        <div class="feedback" id="feedback-q2"></div>
+      </div>
+  
+      <div class="quiz">
+        <h3>3. What is described about Rama in the shloka?</h3>
+        <div class="options">
+          <label><input type="radio" name="q3" value="A"><span> उनके नेतृत्व गुण</span></label>
+          <label><input type="radio" name="q3" value="B"><span> उनके शारीरिक रूप और दिव्य आभा</span></label>
+          <label><input type="radio" name="q3" value="C"><span> उनके राजसी कुल</span></label>
+          <label><input type="radio" name="q3" value="D"><span> सीता के प्रति उनका प्रेम</span></label>
+        </div>
+        <div class="feedback" id="feedback-q3"></div>
+      </div>
+      <div class="quiz">
+          <h3>4. What is the main theme of the shloka?</h3>
+          <label><input type="radio" name="q4" value="A" /> सीता का राम की सुंदरता के प्रति आदर</label><br>
+          <label><input type="radio" name="q4" value="B" /> उनकी संपत्ति और राज्य</label><br>
+          <label><input type="radio" name="q4" value="C" /> राम के दिव्य गुण और वीरता</label><br>
+          <label><input type="radio" name="q4" value="D" /> स्वंवर की प्रतिस्पर्धा</label><br>
+        </div>
+        <div class="feedback" id="feedback-q4"></div>
+        <div class="quiz">
+          <h3>5. What does the riddle ask about Sita’s perception of Rama?</h3>
+          <label><input type="radio" name="q5" value="A" /> राम को क्या गुस्सा दिलाता है</label><br>
+          <label><input type="radio" name="q5" value="B" /> क्या चीज़ सीता के हृदय और मन को मोहित करती है</label><br>
+          <label><input type="radio" name="q5" value="C" /> राम को क्या दुखी करता है</label><br>
+          <label><input type="radio" name="q5" value="D" /> स्वंवर का उद्देश्य क्या था</label><br>
+        </div>
+        <div class="feedback" id="feedback-q5"></div>
+        <div class="shlok">Shlok 2</div>
+  
+  
+      <div class="quiz">
+          <h3>1.How did Rama react after seeing Sita for the first time?</h3>
+          <div class="options">
+            <label><input type="radio" name="q6" value="A"><span>वह भ्रमित हो गए और युद्ध करना भूल गए</span></label>
+            <label><input type="radio" name="q6" value="B"><span>उनका मन मोहित हो गया और वे अपलक देखने लगे</span></label>
+            <label><input type="radio" name="q6" value="C"><span> उन्होंने सीता को पहचाना नहीं</span></label>
+            <label><input type="radio" name="q6" value="D"><span>उन्होंने तुरंत सीता से संवाद किया</span></label>
+          </div>
+          <div class="feedback" id="feedback-q6"></div>
+        </div>
+        <div class="quiz">
+          <h3>2. What does "mano mohitam" signify about Rama’s state of mind?</h3>
+          <div class="options">
+            <label><input type="radio" name="q7" value="A"><span> राम क्रोधित हो गए</span></label>
+            <label><input type="radio" name="q7" value="B"><span> राम का ध्यान भटक गया</span></label>
+            <label><input type="radio" name="q7" value="C"><span> राम का मन सीता की ओर आकर्षित हो गया</span></label>
+            <label><input type="radio" name="q7" value="D"><span> राम भयभीत हो गए</span></label>
+          </div>
+          <div class="feedback" id="feedback-q7"></div>
+        </div>
+        <div class="quiz">
+          <h3>3. What is the meaning of “hṛdi sadā nayanti tam”?</h3>
+          <div class="options">
+            <label><input type="radio" name="q8" value="A"><span> सीता राम को युद्ध की ओर ले जाती हैं</span></label>
+            <label><input type="radio" name="q8" value="B"><span>  राम का हृदय सदा सीता की ओर झुकता है</span></label>
+            <label><input type="radio" name="q8" value="C"><span> राम सीता को भूल जाते हैं</span></label>
+            <label><input type="radio" name="q8" value="D"><span> सीता राम को वन में ले जाती हैं</span></label>
+          </div>
+          <div class="feedback" id="feedback-q8"></div>
+        </div>
+        <div class="quiz">
+          <h3>4. Which adjectives describe Sita’s beauty in the shloka?</h3>
+          <div class="options">
+            <label><input type="radio" name="q9" value="A"><span> ललितं, सौम्यं, सुंदरम्</span></label>
+            <label><input type="radio" name="q9" value="B"><span> बलवान्, कठोर, धैर्यवान्</span></label>
+            <label><input type="radio" name="q9" value="C"><span>क्रुद्ध, रणवीर, तापस</span></label>
+            <label><input type="radio" name="q9" value="D"><span>  मोहक, विवेकशील, कांतारूपा</span></label>
+          </div>
+          <div class="feedback" id="feedback-q9"></div>
+        </div>
+        <div class="quiz">
+          <h3>5. Which part of the shloka best expresses the idea of “the heart’s awakening”?</h3>
+          <div class="options">
+            <label><input type="radio" name="q10" value="A"><span>ललितं सौम्यं</span></label>
+            <label><input type="radio" name="q10" value="B"><span> मनो मोहितं</span></label>
+            <label><input type="radio" name="q10" value="C"><span>दृष्ट्वा सीतां </span></label>
+            <label><input type="radio" name="q10" value="D"><span> हृदि सदा नयन्ति तम्</span></label>
+          </div>
+          <div class="feedback" id="feedback-q10"></div>
+        </div>
+  
+        <div class="shlok">Shlok 3</div>
+        <div class="quiz">
+          <h3>1. Who is referred to in the shloka as the one who could string the divine bow of Shiva?</h3>
+          <div class="options">
+            <label><input type="radio" name="q11" value="A"><span>श्री कृष्ण</span></label>
+            <label><input type="radio" name="q11" value="B"><span>श्री राम </span></label>
+            <label><input type="radio" name="q11" value="C"><span> अर्जुन</span></label>
+            <label><input type="radio" name="q11" value="D"><span> शिव</span></label>
+          </div>
+          <div class="feedback" id="feedback-q11"></div>
+        </div>
+        <div class="quiz">
+          <h3>2.According to the shloka, who is the one that never fails to win Sita’s heart through the test of the bow?</h3>
+          <div class="options">
+            <label><input type="radio" name="q12" value="A"><span>रावण</span></label>
+            <label><input type="radio" name="q12" value="B"><span> लक्ष्मण</span></label>
+            <label><input type="radio" name="q12" value="C"><span> श्री राम</span></label>
+            <label><input type="radio" name="q12" value="D"><span>हनुमान </span></label>
+          </div>
+          <div class="feedback" id="feedback-q12"></div>
+        </div>
+        <div class="quiz">
+          <h3>3. What did the Shloka signify regarding Sita's decision?</h3>
+          <div class="options">
+            <label><input type="radio" name="q13" value="A"><span>सीता का चुनाव केवल भगवान राम के लिए था</span></label>
+            <label><input type="radio" name="q13" value="B"><span>  सीता ने केवल परशुराम को चुना</span></label>
+            <label><input type="radio" name="q13" value="C"><span> सीता ने स्वंय को त्याग दिया </span></label>
+            <label><input type="radio" name="q13" value="D"><span>सीता का चुनाव किसी और के लिए था</span></label>
+          </div>
+          <div class="feedback" id="feedback-q13"></div>
+        </div>
+        <div class="quiz">
+          <h3>4.स्वंवर के दौरान लक्ष्मण और परशुराम के बीच संघर्ष कैसे समाप्त हुआ?</h3>
+          <div class="options">
+            <label><input type="radio" name="q14" value="A"><span>भगवान राम ने介व और परशुराम को शान्त किया</span></label>
+            <label><input type="radio" name="q14" value="B"><span> देवी सीता ने स्वयं संघर्ष को रोका</span></label>
+            <label><input type="radio" name="q14" value="C"><span>राम और लक्ष्मण ने मिलकर परशुराम को हराया </span></label>
+            <label><input type="radio" name="q14" value="D"><span>परशुराम ने स्वयं लक्ष्मण से युद्ध को समाप्त किया</span></label>
+          </div>
+          <div class="feedback" id="feedback-q14"></div>
+        </div>
+        <div class="quiz">
+          <h3>5.What is the significance of the divine bow mentioned in the Shloka?</h3>
+          <div class="options">
+            <label><input type="radio" name="q15" value="A"><span> यह भगवान राम का धनुष था</span></label>
+            <label><input type="radio" name="q15" value="B"><span>यह भगवान शिव का धनुष था </span></label>
+            <label><input type="radio" name="q15" value="C"><span>यह भगवान कृष्ण का धनुष था</span></label>
+            <label><input type="radio" name="q15" value="D"><span>यह राक्षसों का धनुष था</span></label>
+          </div>
+          <div class="feedback" id="feedback-q15"></div>
+        </div>
+  
+        <div class="shlok">Bonus Shlok</div>
+        <div class="quiz">
+          <h3>1.What is the meaning of the phrase "न मे मृत्यु-शंका, न मे जाति-भेदः" from the shloka?</h3>
+          <div class="options">
+            <label><input type="radio" name="q16" value="A"><span> मुझे मृत्यु का भय है और जाति के बंधन में हूँ।</span></label>
+            <label><input type="radio" name="q16" value="B"><span> मुझे मृत्यु का भय नहीं है और न ही मैं जाति से बंधा हूँ।</span></label>
+            <label><input type="radio" name="q16" value="C"><span>मुझे मृत्यु का डर है लेकिन मैं जाति से मुक्त हूँ।</span></label>
+            <label><input type="radio" name="q16" value="D"><span>मुझे जन्म और मृत्यु का भय है और रिश्तों से बंधा हूँ।</span></label>
+          </div>
+          <div class="feedback" id="feedback-q16"></div>
+        </div>
+        <div class="quiz">
+          <h3>2.According to the shloka, who does the speaker claim to be?</h3>
+          <div class="options">
+            <label><input type="radio" name="q17" value="A"><span> एक सामान्य मनुष्य, रिश्तों से बंधा हुआ।</span></label>
+            <label><input type="radio" name="q17" value="B"><span> एक आनंदमय, शाश्वत और मुक्त अस्तित्व।</span></label>
+            <label><input type="radio" name="q17" value="C"><span>एक भयभीत आत्मा जो जन्म और मृत्यु के चक्र में है।</span></label>
+            <label><input type="radio" name="q17" value="D"><span>एक आध्यात्मिक साधक जो सत्य की तलाश में है।</span></label>
+          </div>
+          <div class="feedback" id="feedback-q17"></div>
+        </div>
+        <div class="quiz">
+          <h3>3.What does the phrase "चिदानन्दरूपः शिवोऽहम् शिवोऽहम्" in the shloka signify?</h3>
+          <div class="options">
+            <label><input type="radio" name="q18" value="A"><span>मैं शिव हूँ, ज्ञान और आनंद का रूप। </span></label>
+            <label><input type="radio" name="q18" value="B"><span>मैं शिव हूँ, भय और शोक का रूप।</span></label>
+            <label><input type="radio" name="q18" value="C"><span>मैं शिव हूँ, संसार से बंधा हुआ।</span></label>
+            <label><input type="radio" name="q18" value="D"><span>मैं शिव हूँ, भौतिक संसार में खोया हुआ।</span></label>
+          </div>
+          <div class="feedback" id="feedback-q18"></div>
+        </div>
+        <div class="quiz">
+          <h3>4.What does the speaker indicate about their relation to birth and death in the shloka?</h3>
+          <div class="options">
+            <label><input type="radio" name="q19" value="A"><span>वक्ता मानते हैं कि वे जन्म और मृत्यु के चक्र में फंसे हुए हैं। </span></label>
+            <label><input type="radio" name="q19" value="B"><span></span> वक्ता कहते हैं कि वे जन्म और मृत्यु से मुक्त हैं।</label>
+            <label><input type="radio" name="q19" value="C"><span>वक्ता अपने जन्म और मृत्यु से संबंधित होने को लेकर संकोच करते हैं।</span></label>
+            <label><input type="radio" name="q19" value="D"><span> वक्ता जन्म और मृत्यु के चक्र से बचना चाहते हैं।</span></label>
+          </div>
+          <div class="feedback" id="feedback-q19"></div>
+        </div>
+        <div class="quiz">
+          <h3>5.In the context of the shloka, what does the speaker's declaration "I am Shiva" mean?</h3>
+          <div class="options">
+            <label><input type="radio" name="q20" value="A"><span>  वक्ता यह दावा कर रहे हैं कि वे भगवान शिव के शारीरिक रूप हैं।</span></label>
+            <label><input type="radio" name="q20" value="B"><span> वक्ता स्वयं को शाश्वत, अदृश्य और मृत्यु के पार ब्रह्म रूप शिव के रूप में पहचानते हैं।</span></label>
+            <label><input type="radio" name="q20" value="C"><span> वक्ता यह कह रहे हैं कि वे शिव के अवतार हैं।</span></label>
+            <label><input type="radio" name="q20" value="D"><span> वक्ता यह कह रहे हैं कि वे शिव के अनुयायी हैं। bonus shok</span></label>
+          </div>
+          <div class="feedback" id="feedback-q20"></div>
+        </div>
+
+    <button type="button" id="submit-btn">Submit Quiz</button>
+  </form>
+
+  <script>
+    const correctAnswers = {
+      q1: "B"
+    };
+
+    document.getElementById("submit-btn").addEventListener("click", () => {
+      const form = document.getElementById("quiz-form");
+      const quizDivs = form.querySelectorAll(".quiz");
+
+      quizDivs.forEach((div, index) => {
+        const questionId = `q${index + 1}`;
+        const selected = div.querySelector(`input[name="${questionId}"]:checked`);
+        const correct = correctAnswers[questionId];
+        const feedback = document.getElementById(`feedback-${questionId}`);
+
+        div.classList.remove("correct", "incorrect");
+        feedback.textContent = "";
+
+        if (selected) {
+          if (selected.value === correct) {
+            div.classList.add("correct");
+            feedback.textContent = "✅ Correct!";
+          } else {
+            div.classList.add("incorrect");
+            feedback.textContent = "❌ Incorrect.";
+            const correctOption = div.querySelector(`input[value="${correct}"]`);
+            if (correctOption) {
+              correctOption.parentElement.style.fontWeight = "bold";
+              correctOption.parentElement.style.color = "#28a745";
+            }
+          }
+        } else {
+          div.classList.add("incorrect");
+          feedback.textContent = "❌ Please select an answer.";
+        }
+      });
+    });
+
+    const toggleBtn = document.getElementById("themeToggle");
+    toggleBtn.addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
+      toggleBtn.textContent = document.body.classList.contains("dark-mode") ? "🌞" : "🌙";
+    });
+  </script>
+</body>
+</html>
